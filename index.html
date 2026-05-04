@@ -1,0 +1,1838 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KitabEvi — Onlayn Kitab Mağazası</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --yesil:   #1D9E75;
+      --tund:    #0F6E56;
+      --aciq:    #E1F5EE;
+      --sarı:    #EF9F27;
+      --mtn:     #2C2C2A;
+      --boz:     #888780;
+      --zemin:   #F9F7F2;
+      --kart:    #FFFFFF;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--zemin);
+      color: var(--mtn);
+    }
+
+    nav {
+      background: var(--kart);
+      border-bottom: 1px solid #e8e6e0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .nav-ici {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--tund);
+      text-decoration: none;
+      flex-shrink: 0;
+    }
+
+    .logo span { color: var(--sarı); }
+
+    .axtaris {
+      display: flex;
+      align-items: center;
+      background: var(--zemin);
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 8px 14px;
+      gap: 8px;
+      flex: 1;
+      max-width: 380px;
+    }
+
+    .axtaris input {
+      border: none;
+      background: transparent;
+      font-size: 14px;
+      outline: none;
+      width: 100%;
+      font-family: 'DM Sans', sans-serif;
+    }
+
+    .nav-dugmeler {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-shrink: 0;
+    }
+
+    .nav-link {
+      font-size: 14px;
+      color: var(--boz);
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    .nav-link:hover { color: var(--tund); }
+
+    .sebet-dugme {
+      background: var(--yesil);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 9px 18px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: background 0.2s;
+      font-family: 'DM Sans', sans-serif;
+    }
+    .sebet-dugme:hover { background: var(--tund); }
+
+    .hero {
+      background: linear-gradient(135deg, #0F6E56 0%, #1D9E75 60%, #5DCAA5 100%);
+      color: white;
+      padding: 80px 24px;
+      text-align: center;
+    }
+
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 52px;
+      font-weight: 700;
+      margin-bottom: 16px;
+      line-height: 1.2;
+    }
+
+    .hero p {
+      font-size: 18px;
+      opacity: 0.9;
+      margin-bottom: 36px;
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .hero-dugmeler {
+      display: flex;
+      gap: 14px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .dugme-sarı {
+      background: var(--sarı);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      padding: 14px 32px;
+      font-size: 16px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: opacity 0.2s;
+      font-family: 'DM Sans', sans-serif;
+    }
+    .dugme-sarı:hover { opacity: 0.9; }
+
+    .dugme-kontur {
+      background: transparent;
+      color: white;
+      border: 2px solid rgba(255,255,255,0.7);
+      border-radius: 10px;
+      padding: 14px 32px;
+      font-size: 16px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s;
+      font-family: 'DM Sans', sans-serif;
+    }
+    .dugme-kontur:hover { background: rgba(255,255,255,0.15); }
+
+    .kateqoriyalar {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 48px 24px 0;
+    }
+
+    .bolum-baslig {
+      font-family: 'Playfair Display', serif;
+      font-size: 28px;
+      margin-bottom: 24px;
+      color: var(--mtn);
+    }
+
+    .kat-qrid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 12px;
+    }
+
+    .kat-kart {
+      background: var(--kart);
+      border: 1px solid #e8e6e0;
+      border-radius: 12px;
+      padding: 20px 16px;
+      text-align: center;
+      cursor: pointer;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+    .kat-kart:hover {
+      transform: translateY(-3px);
+      border-color: var(--yesil);
+    }
+    .kat-kart.aktiv {
+      border-color: var(--yesil);
+      background: var(--aciq);
+    }
+
+    .kat-ikon { font-size: 28px; margin-bottom: 8px; }
+    .kat-ad { font-size: 13px; font-weight: 500; color: var(--mtn); }
+
+    .kitablar {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 48px 24px;
+    }
+
+    .bolum-baslik-sira {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .axtaris-neticesi {
+      font-size: 14px;
+      color: var(--boz);
+    }
+
+    .kitab-qrid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(185px, 1fr));
+      gap: 24px;
+    }
+
+    .kitab-kart {
+      background: var(--kart);
+      border: 1px solid #e8e6e0;
+      border-radius: 14px;
+      overflow: hidden;
+      transition: transform 0.2s, box-shadow 0.2s;
+      cursor: pointer;
+    }
+    .kitab-kart:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 32px rgba(0,0,0,0.10);
+    }
+
+    .kitab-sekil {
+      width: 100%;
+      height: 230px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .kitab-sekil img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s;
+    }
+    .kitab-kart:hover .kitab-sekil img {
+      transform: scale(1.04);
+    }
+
+    .kitab-sekil .fallback-icon {
+      font-size: 64px;
+    }
+
+    .endirim-etiket {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: #E24B4A;
+      color: white;
+      font-size: 11px;
+      font-weight: 500;
+      padding: 3px 8px;
+      border-radius: 6px;
+      z-index: 2;
+    }
+
+    .yeni-etiket {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background: var(--sarı);
+      color: white;
+      font-size: 11px;
+      font-weight: 500;
+      padding: 3px 8px;
+      border-radius: 6px;
+      z-index: 2;
+    }
+
+    .elan-etiket {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background: #7C5CBF;
+      color: white;
+      font-size: 11px;
+      font-weight: 500;
+      padding: 3px 8px;
+      border-radius: 6px;
+      z-index: 2;
+    }
+
+    .kitab-melumat {
+      padding: 14px 16px 16px;
+    }
+
+    .kitab-ad {
+      font-family: 'Playfair Display', serif;
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 4px;
+      color: var(--mtn);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .kitab-muellif {
+      font-size: 12px;
+      color: var(--boz);
+      margin-bottom: 8px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .reytinq {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      margin-bottom: 10px;
+    }
+
+    .ulduzlar { color: var(--sarı); font-size: 12px; }
+    .reytinq-say { font-size: 12px; color: var(--boz); }
+
+    .qiymet-sira {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .qiymet {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--tund);
+    }
+
+    .kecmis-qiymet {
+      font-size: 12px;
+      color: var(--boz);
+      text-decoration: line-through;
+      margin-left: 5px;
+    }
+
+    .sepete-at {
+      background: var(--yesil);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 7px 12px;
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s;
+      font-family: 'DM Sans', sans-serif;
+    }
+    .sepete-at:hover { background: var(--tund); }
+
+    .elan-bolme {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px 48px;
+    }
+
+    .elan-forma-kutu {
+      background: var(--kart);
+      border: 1px solid #e8e6e0;
+      border-radius: 16px;
+      padding: 32px;
+    }
+
+    .elan-forma-baslig {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      margin-bottom: 8px;
+      color: var(--mtn);
+    }
+
+    .elan-forma-alt {
+      font-size: 14px;
+      color: var(--boz);
+      margin-bottom: 24px;
+    }
+
+    .forma-qrid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    @media (max-width: 900px) {
+      .nav-ici {
+        flex-wrap: wrap;
+        align-items: flex-start;
+        padding: 12px 18px;
+        height: auto;
+      }
+
+      .logo {
+        font-size: 20px;
+        margin-bottom: 10px;
+      }
+
+      .axtaris {
+        order: 2;
+        width: 100%;
+        max-width: 100%;
+        margin-top: 10px;
+      }
+
+      .nav-dugmeler {
+        order: 3;
+        width: 100%;
+        justify-content: space-between;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+
+      .nav-link {
+        font-size: 13px;
+      }
+
+      .sebet-dugme {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .hero {
+        padding: 64px 18px;
+      }
+
+      .hero h1 {
+        font-size: 38px;
+      }
+
+      .hero p {
+        font-size: 16px;
+        max-width: 100%;
+      }
+
+      .hero-dugmeler {
+        gap: 12px;
+      }
+
+      .dugme-sarı,
+      .dugme-kontur {
+        width: 100%;
+        padding: 14px 18px;
+      }
+
+      .kitab-sekil {
+        height: 200px;
+      }
+
+      .kitab-melumat .qiymet-sira {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+      }
+
+      .sebet-mehsul {
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      .sebet-mehsul-sekil {
+        width: 45px;
+        height: 60px;
+      }
+
+      .email-forma {
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .email-forma input,
+      .email-forma button {
+        width: 100%;
+        min-width: 0;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .forma-qrid { grid-template-columns: 1fr; }
+    }
+
+    .forma-qrid .tam-en {
+      grid-column: 1 / -1;
+    }
+
+    .forma-sahə label {
+      display: block;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--mtn);
+      margin-bottom: 6px;
+    }
+
+    .forma-sahə input,
+    .forma-sahə textarea,
+    .forma-sahə select {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 14px;
+      font-family: 'DM Sans', sans-serif;
+      background: var(--zemin);
+      outline: none;
+      transition: border-color 0.2s;
+      color: var(--mtn);
+    }
+
+    .forma-sahə input:focus,
+    .forma-sahə textarea:focus,
+    .forma-sahə select:focus {
+      border-color: var(--yesil);
+    }
+
+    .forma-sahə textarea {
+      resize: vertical;
+      min-height: 90px;
+    }
+
+    .elan-gondər {
+      margin-top: 20px;
+      background: var(--yesil);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      padding: 12px 32px;
+      font-size: 15px;
+      font-weight: 500;
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      transition: background 0.2s;
+    }
+    .elan-gondər:hover { background: var(--tund); }
+
+    .elanlar-list {
+      margin-top: 32px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(185px, 1fr));
+      gap: 20px;
+    }
+
+    .elan-kart {
+      background: var(--kart);
+      border: 2px dashed #c5e8da;
+      border-radius: 14px;
+      overflow: hidden;
+      transition: transform 0.2s;
+    }
+    .elan-kart:hover { transform: translateY(-3px); }
+
+    .xeberlik {
+      background: var(--aciq);
+      border-top: 1px solid #b5e5d0;
+      border-bottom: 1px solid #b5e5d0;
+      padding: 48px 24px;
+      text-align: center;
+    }
+
+    .xeberlik h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 26px;
+      color: var(--tund);
+      margin-bottom: 8px;
+    }
+
+    .xeberlik p {
+      color: var(--boz);
+      font-size: 15px;
+      margin-bottom: 24px;
+    }
+
+    .email-forma {
+      display: flex;
+      gap: 10px;
+      max-width: 440px;
+      margin: 0 auto;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .email-forma input {
+      flex: 1;
+      min-width: 220px;
+      padding: 12px 16px;
+      border: 1px solid #b5e5d0;
+      border-radius: 10px;
+      font-size: 14px;
+      outline: none;
+      font-family: 'DM Sans', sans-serif;
+      background: white;
+    }
+    .email-forma input:focus { border-color: var(--yesil); }
+
+    .email-forma button {
+      background: var(--yesil);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      padding: 12px 24px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      transition: background 0.2s;
+    }
+    .email-forma button:hover { background: var(--tund); }
+
+    footer {
+      background: var(--mtn);
+      color: #B4B2A9;
+      padding: 48px 24px 24px;
+    }
+
+    .footer-ici { max-width: 1200px; margin: 0 auto; }
+
+    .footer-qrid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 36px;
+      margin-bottom: 36px;
+    }
+
+    .footer-sutun h4 {
+      font-family: 'Playfair Display', serif;
+      font-size: 16px;
+      color: white;
+      margin-bottom: 14px;
+    }
+
+    .footer-sutun ul { list-style: none; }
+    .footer-sutun li { margin-bottom: 8px; }
+    .footer-sutun a {
+      color: #B4B2A9;
+      text-decoration: none;
+      font-size: 14px;
+      transition: color 0.2s;
+    }
+    .footer-sutun a:hover { color: white; }
+
+    .footer-alt {
+      border-top: 1px solid #444441;
+      padding-top: 24px;
+      text-align: center;
+      font-size: 13px;
+      color: #888780;
+    }
+
+    #bildiris {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: var(--tund);
+      color: white;
+      padding: 14px 22px;
+      border-radius: 10px;
+      font-size: 14px;
+      opacity: 0;
+      transform: translateY(16px);
+      transition: all 0.3s;
+      pointer-events: none;
+      z-index: 999;
+    }
+    #bildiris.goster { opacity: 1; transform: translateY(0); }
+
+    .sebet-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      display: none;
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+    .sebet-modal.goster { display: flex; }
+
+    .sebet-ici {
+      background: var(--kart);
+      border-radius: 16px;
+      width: 90%;
+      max-width: 500px;
+      max-height: 80vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sebet-baslig {
+      padding: 20px 24px;
+      border-bottom: 1px solid #e8e6e0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .sebet-baslig h3 {
+      margin: 0;
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      color: var(--mtn);
+    }
+    .sebet-bagla {
+      background: none;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      color: var(--boz);
+      padding: 0;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      transition: background 0.2s;
+    }
+    .sebet-bagla:hover { background: var(--zemin); }
+
+    .sebet-mehsullar {
+      flex: 1;
+      overflow-y: auto;
+      padding: 0;
+      max-height: 400px;
+    }
+
+    .sebet-mehsul {
+      display: flex;
+      align-items: center;
+      padding: 16px 24px;
+      border-bottom: 1px solid #f5f3f0;
+      gap: 12px;
+    }
+    .sebet-mehsul:last-child { border-bottom: none; }
+
+    .sebet-mehsul-sekil {
+      width: 50px;
+      height: 70px;
+      background: var(--aciq);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      flex-shrink: 0;
+    }
+
+    .sebet-mehsul-melumat {
+      flex: 1;
+      min-width: 0;
+    }
+    .sebet-mehsul-ad {
+      font-weight: 600;
+      font-size: 14px;
+      color: var(--mtn);
+      margin-bottom: 2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .sebet-mehsul-muellif {
+      font-size: 12px;
+      color: var(--boz);
+      margin-bottom: 8px;
+    }
+    .sebet-mehsul-qiymet {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--tund);
+    }
+
+    .sebet-miqdar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+    .sebet-miqdar-dugme {
+      width: 24px;
+      height: 24px;
+      border: 1px solid #ddd;
+      background: white;
+      border-radius: 4px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      transition: background 0.2s;
+    }
+    .sebet-miqdar-dugme:hover { background: var(--zemin); }
+    .sebet-miqdar-say { font-weight: 500; min-width: 20px; text-align: center; }
+
+    .sebet-sil {
+      background: none;
+      border: none;
+      color: #E24B4A;
+      cursor: pointer;
+      padding: 4px;
+      border-radius: 4px;
+      transition: background 0.2s;
+      flex-shrink: 0;
+    }
+    .sebet-sil:hover { background: #FCEBEB; }
+
+    .sebet-bos {
+      text-align: center;
+      padding: 48px 24px;
+      color: var(--boz);
+    }
+    .sebet-bos .bos-ikon { font-size: 48px; margin-bottom: 12px; }
+    .sebet-bos p { font-size: 16px; }
+
+    .sebet-alt {
+      padding: 20px 24px;
+      border-top: 1px solid #e8e6e0;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .sebet-cem {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--mtn);
+    }
+
+    .sebet-sifar {
+      background: transparent;
+      color: var(--boz);
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 10px 16px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .sebet-sifar:hover { background: var(--zemin); }
+
+    .sebet-al {
+      background: var(--yesil);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 12px 24px;
+      font-size: 16px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .sebet-al:hover { background: var(--tund); }
+
+    .bos-neticə {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 48px 24px;
+      color: var(--boz);
+    }
+    .bos-neticə .bos-ikon { font-size: 48px; margin-bottom: 12px; }
+    .bos-neticə p { font-size: 16px; }
+
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 2000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      animation: fadeIn 0.3s ease-out;
+    }
+    .modal.goster { display: flex; align-items: center; justify-content: center; }
+
+    .modal-ici {
+      background: var(--kart);
+      border-radius: 16px;
+      padding: 0;
+      max-width: 500px;
+      width: 90%;
+      max-height: 80vh;
+      overflow-y: auto;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      animation: slideIn 0.3s ease-out;
+    }
+
+    .modal-basliq {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 24px 24px 16px;
+      border-bottom: 1px solid #e8e6e0;
+    }
+
+    .modal-basliq h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--mtn);
+      margin: 0;
+    }
+
+    .modal-bagla {
+      background: none;
+      border: none;
+      font-size: 28px;
+      color: var(--boz);
+      cursor: pointer;
+      padding: 0;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      transition: background 0.2s;
+    }
+    .modal-bagla:hover { background: var(--zemin); color: var(--mtn); }
+
+    .modal-melumat {
+      padding: 24px;
+    }
+
+    .modal-melumat p {
+      margin: 0 0 12px 0;
+      line-height: 1.6;
+      color: var(--mtn);
+    }
+
+    .modal-melumat p:last-child {
+      margin-bottom: 0;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes slideIn {
+      from { transform: translateY(-20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-ici">
+    <a href="#" class="logo">Kitab<span>Evi</span></a>
+
+    <div class="axtaris">
+      <span>🔍</span>
+      <input type="text" id="axtarisInput" placeholder="Kitab adı, müəllif axtar..." oninput="axtarişEt(this.value)" />
+    </div>
+
+    <div class="nav-dugmeler">
+      <a href="#" class="nav-link">Daxil ol</a>
+      <a href="#" class="nav-link">Qeydiyyat</a>
+      <button class="sebet-dugme" id="sebetDugme" onclick="sebetGoster()">
+        🛒 Səbət (0)
+      </button>
+    </div>
+  </div>
+</nav>
+
+<section class="hero">
+  <h1>Hər kitab —<br/>bir dünya 📚</h1>
+  <p>Azərbaycanın ən böyük onlayn kitab mağazasına xoş gəldiniz.</p>
+  <div class="hero-dugmeler">
+    <button class="dugme-sarı" onclick="document.getElementById('kitablarBolme').scrollIntoView({behavior:'smooth'})">Kitablara bax</button>
+    <button class="dugme-kontur" onclick="document.getElementById('axtarisInput').focus()">Kitab axtar</button>
+  </div>
+</section>
+
+<section class="kateqoriyalar">
+  <h2 class="bolum-baslig">Kateqoriyalar</h2>
+  <div class="kat-qrid" id="katQrid">
+    <div class="kat-kart" onclick="kateqoriyaSeç(this,'Hamısı')">
+      <div class="kat-ikon">📚</div>
+      <div class="kat-ad">Hamısı</div>
+    </div>
+    <div class="kat-kart" onclick="kateqoriyaSeç(this,'Roman')">
+      <div class="kat-ikon">📖</div>
+      <div class="kat-ad">Roman</div>
+    </div>
+    <div class="kat-kart" onclick="kateqoriyaSeç(this,'Elm')">
+      <div class="kat-ikon">🔬</div>
+      <div class="kat-ad">Elm</div>
+    </div>
+    <div class="kat-kart" onclick="kateqoriyaSeç(this,'Psixologiya')">
+      <div class="kat-ikon">🧠</div>
+      <div class="kat-ad">Psixologiya</div>
+    </div>
+    <div class="kat-kart" onclick="kateqoriyaSeç(this,'Biznes')">
+      <div class="kat-ikon">💼</div>
+      <div class="kat-ad">Biznes</div>
+    </div>
+    <div class="kat-kart" onclick="kateqoriyaSeç(this,'Uşaq')">
+      <div class="kat-ikon">👶</div>
+      <div class="kat-ad">Uşaq kitabları</div>
+    </div>
+    <div class="kat-kart" onclick="kateqoriyaSeç(this,'Tarix')">
+      <div class="kat-ikon">🌍</div>
+      <div class="kat-ad">Tarix</div>
+    </div>
+    <div class="kat-kart" onclick="kateqoriyaSeç(this,'Proqramlaşdırma')">
+      <div class="kat-ikon">💻</div>
+      <div class="kat-ad">Proqramlaşdırma</div>
+    </div>
+    <div class="kat-kart" onclick="kateqoriyaSeç(this,'Şeir')">
+      <div class="kat-ikon">🎭</div>
+      <div class="kat-ad">Şeir</div>
+    </div>
+  </div>
+</section>
+
+<section class="kitablar" id="kitablarBolme">
+  <div class="bolum-baslik-sira">
+    <h2 class="bolum-baslig" style="margin-bottom:0" id="bolumBasliq">Populyar kitablar</h2>
+    <span class="axtaris-neticesi" id="axtarisNeticesi"></span>
+  </div>
+  <div class="kitab-qrid" id="kitabQrid">
+  </div>
+</section>
+
+<section class="elan-bolme" id="elanBolme">
+  <h2 class="bolum-baslig">📢 Öz elanını yerləşdir</h2>
+  <p style="color:var(--boz);font-size:14px;margin-bottom:24px;">Satmaq istədiyin kitabı burada elan et — minlərlə oxucu görsün.</p>
+  <div class="elan-forma-kutu">
+    <h3 class="elan-forma-baslig">Kitab məlumatları</h3>
+    <p class="elan-forma-alt">Bütün sahələri doldurun, elanınız dərhal yayımlanacaq.</p>
+    <div class="forma-qrid">
+      <div class="forma-sahə">
+        <label>Kitab adı *</label>
+        <input type="text" id="elanAd" placeholder="məs. Dərin İş" />
+      </div>
+      <div class="forma-sahə">
+        <label>Müəllif *</label>
+        <input type="text" id="elanMuellif" placeholder="məs. Cal Newport" />
+      </div>
+      <div class="forma-sahə">
+        <label>Qiymət (₼) *</label>
+        <input type="number" id="elanQiymet" placeholder="məs. 12.50" step="0.01" min="0" />
+      </div>
+      <div class="forma-sahə">
+        <label>Kateqoriya</label>
+        <select id="elanKateqoriya">
+          <option value="Roman">Roman</option>
+          <option value="Elm">Elm</option>
+          <option value="Psixologiya">Psixologiya</option>
+          <option value="Biznes">Biznes</option>
+          <option value="Uşaq">Uşaq kitabları</option>
+          <option value="Tarix">Tarix</option>
+          <option value="Proqramlaşdırma">Proqramlaşdırma</option>
+          <option value="Şeir">Şeir</option>
+          <option value="Digər">Digər</option>
+        </select>
+      </div>
+      <div class="forma-sahə">
+        <label>Vəziyyəti</label>
+        <select id="elanVeziyyet">
+          <option value="Yeni">Yeni</option>
+          <option value="Əla">Əla vəziyyətdə</option>
+          <option value="Yaxşı">Yaxşı vəziyyətdə</option>
+          <option value="Kafi">Kafi vəziyyətdə</option>
+        </select>
+      </div>
+      <div class="forma-sahə">
+        <label>Əlaqə (telefon / e-poçt)</label>
+        <input type="text" id="elanElaqe" placeholder="məs. +994 50 123 45 67" />
+      </div>
+      <div class="forma-sahə tam-en">
+        <label>Qısa açıqlama</label>
+        <textarea id="elanAcıqlama" placeholder="Kitab haqqında qısa məlumat yazın..."></textarea>
+      </div>
+    </div>
+    <button class="elan-gondər" onclick="elanYerleşdir()">📌 Elanı yerləşdir</button>
+  </div>
+
+  <div id="elanlarList" class="elanlar-list" style="display:none"></div>
+</section>
+
+<section class="xeberlik">
+  <h2>Endirimlər sizə gəlsin 🎁</h2>
+  <p>E-poçtunuzu qeyd edin — xüsusi təkliflər ilk sizə çatsın.</p>
+  <div class="email-forma">
+    <input type="email" placeholder="email@misal.az" />
+    <button onclick="bildirişGoster('Uğurla abunə oldunuz! ✓')">Abunə ol</button>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-ici">
+    <div class="footer-qrid">
+      <div class="footer-sutun">
+        <h4>KitabEvi</h4>
+        <ul>
+          <li><a href="#">Haqqımızda</a></li>
+          <li><a href="#">Karyera</a></li>
+          <li><a href="#">Bloq</a></li>
+          <li><a href="#">Əlaqə</a></li>
+        </ul>
+      </div>
+      <div class="footer-sutun">
+        <h4>Kömək</h4>
+        <ul>
+          <li><a href="#">Çatdırılma</a></li>
+          <li><a href="#">Geri qaytarma</a></li>
+          <li><a href="#">Sıx soruşulanlar</a></li>
+          <li><a href="#">Ödəniş üsulları</a></li>
+        </ul>
+      </div>
+      <div class="footer-sutun">
+        <h4>Kateqoriyalar</h4>
+        <ul>
+          <li><a href="#">Roman</a></li>
+          <li><a href="#">Elm</a></li>
+          <li><a href="#">Biznes</a></li>
+          <li><a href="#">Uşaq kitabları</a></li>
+        </ul>
+      </div>
+      <div class="footer-sutun">
+        <h4>Sosial media</h4>
+        <ul>
+          <li><a href="#">📘 Facebook</a></li>
+          <li><a href="#">📸 Instagram</a></li>
+          <li><a href="#">🐦 Twitter</a></li>
+          <li><a href="#">▶️ YouTube</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-alt">© 2025 KitabEvi. Bütün hüquqlar qorunur.</div>
+  </div>
+</footer>
+
+<div id="bildiris"></div>
+
+<div id="sebetModal" class="sebet-modal">
+  <div class="sebet-ici">
+    <div class="sebet-baslig">
+      <h3>🛒 Səbət</h3>
+      <button class="sebet-bagla" onclick="sebetBagla()">✕</button>
+    </div>
+    <div id="sebetMəhsullar" class="sebet-mehsullar">
+    </div>
+    <div class="sebet-alt">
+      <div class="sebet-cem">
+        <span>Cəmi:</span>
+        <span id="sebetCem">0.00 ₼</span>
+      </div>
+      <button class="sebet-sifar" onclick="sebetSifar()">Səbəti boşalt</button>
+      <button class="sebet-al" onclick="sebetAl()">İndi al</button>
+    </div>
+  </div>
+</div>
+
+<script>
+var KITABLAR = [
+  {
+    ad: "Dərin İş",
+    muellif: "Cal Newport",
+    qiymet: 14.99,
+    kecmisQiymet: null,
+    reytinq: 5,
+    reytinqSay: "248",
+    kateqoriya: "Biznes",
+    etiket: "Yeni",
+    bg: "#E1F5EE",
+    cover: "https://covers.openlibrary.org/b/isbn/1455586692-L.jpg",
+    melumat: "Dərin iş, diqqəti yayındıran şeylərdən uzaqlaşaraq yüksək keyfiyyətli işə fokuslanmağı öyrədir."
+  },
+  {
+    ad: "Atomik Vərdişlər",
+    muellif: "James Clear",
+    qiymet: 12.50,
+    kecmisQiymet: 15.99,
+    reytinq: 5,
+    reytinqSay: "1.4k",
+    kateqoriya: "Psixologiya",
+    etiket: "Endirim",
+    bg: "#FAEEDA",
+    cover: "https://covers.openlibrary.org/b/isbn/0735211299-L.jpg",
+    melumat: "Kiçik dəyişikliklərin böyük nəticələrə necə gətirib çıxardığını göstərən vərdişlər haqqında kitab."
+  },
+  {
+    ad: "1984",
+    muellif: "George Orwell",
+    qiymet: 9.99,
+    kecmisQiymet: null,
+    reytinq: 4,
+    reytinqSay: "3.2k",
+    kateqoriya: "Roman",
+    etiket: null,
+    bg: "#EEEDFE",
+    cover: "https://covers.openlibrary.org/b/isbn/0451524934-L.jpg",
+    melumat: "Totalitar bir cəmiyyətdə yaşayan Winston Smith-in hekayəsi, nəzarət və azadlıq mövzusunda."
+  },
+  {
+    ad: "Kiçik Şahzadə",
+    muellif: "Antoine de Saint-Exupéry",
+    qiymet: 7.49,
+    kecmisQiymet: 9.99,
+    reytinq: 5,
+    reytinqSay: "2.1k",
+    kateqoriya: "Roman",
+    etiket: "Endirim",
+    bg: "#FCEBEB",
+    cover: "https://covers.openlibrary.org/b/isbn/9780156012195-L.jpg",
+    melumat: "Kiçik şahzadənin səyahətləri vasitəsilə böyüklərin dünyasını tənqid edən klassik əsər."
+  },
+  {
+    ad: "Python Crash Course",
+    muellif: "Eric Matthes",
+    qiymet: 22.99,
+    kecmisQiymet: null,
+    reytinq: 4,
+    reytinqSay: "890",
+    kateqoriya: "Proqramlaşdırma",
+    etiket: "Yeni",
+    bg: "#EAF3DE",
+    cover: "https://covers.openlibrary.org/b/isbn/1593279280-L.jpg",
+    melumat: "Python proqramlaşdırma dilini sıfırdan öyrənmək üçün praktiki bələdçi."
+  },
+  {
+    ad: "Sapiens",
+    muellif: "Yuval Noah Harari",
+    qiymet: 17.99,
+    kecmisQiymet: null,
+    reytinq: 5,
+    reytinqSay: "4.8k",
+    kateqoriya: "Tarix",
+    etiket: null,
+    bg: "#FBEAF0",
+    cover: "https://covers.openlibrary.org/b/isbn/0062316095-L.jpg",
+    melumat: "İnsanın tarixi və cəmiyyətin inkişafı haqqında geniş perspektivli kitab."
+  },
+  {
+    ad: "Thinking, Fast and Slow",
+    muellif: "Daniel Kahneman",
+    qiymet: 16.50,
+    kecmisQiymet: 19.99,
+    reytinq: 5,
+    reytinqSay: "2.7k",
+    kateqoriya: "Psixologiya",
+    etiket: "Endirim",
+    bg: "#EEF5FB",
+    cover: "https://covers.openlibrary.org/b/isbn/0374533555-L.jpg",
+    melumat: "İnsanın düşünmə prosesləri və qərarvermə mexanizmləri haqqında psixologiya kitabı."
+  },
+  {
+    ad: "The Alchemist",
+    muellif: "Paulo Coelho",
+    qiymet: 10.99,
+    kecmisQiymet: null,
+    reytinq: 4,
+    reytinqSay: "5.6k",
+    kateqoriya: "Roman",
+    etiket: null,
+    bg: "#FFF8E8",
+    cover: "https://covers.openlibrary.org/b/isbn/0062315005-L.jpg",
+    melumat: "Çoban oğlanın xəyalını gerçəkləşdirmək üçün səyahəti, motivasiya və tale mövzusunda."
+  },
+  {
+    ad: "Clean Code",
+    muellif: "Robert C. Martin",
+    qiymet: 25.99,
+    kecmisQiymet: null,
+    reytinq: 5,
+    reytinqSay: "1.1k",
+    kateqoriya: "Proqramlaşdırma",
+    etiket: null,
+    bg: "#F0F0F0",
+    cover: "https://covers.openlibrary.org/b/isbn/0132350882-L.jpg",
+    melumat: "Təmiz və oxunaqlı kod yazmağın prinsipləri haqqında proqramçılara bələdçi."
+  },
+  {
+    ad: "Harry Potter və Fəlsəfə Daşı",
+    muellif: "J.K. Rowling",
+    qiymet: 13.99,
+    kecmisQiymet: null,
+    reytinq: 5,
+    reytinqSay: "8.3k",
+    kateqoriya: "Uşaq",
+    etiket: null,
+    bg: "#F5EEFB",
+    cover: "https://covers.openlibrary.org/b/isbn/0439708184-L.jpg",
+    melumat: "Gənc sehrbaz Harry Potter-in macəraları, sehrbazlıq dünyasının başlanğıcı."
+  },
+  {
+    ad: "Rich Dad Poor Dad",
+    muellif: "Robert Kiyosaki",
+    qiymet: 11.99,
+    kecmisQiymet: 14.99,
+    reytinq: 4,
+    reytinqSay: "3.4k",
+    kateqoriya: "Biznes",
+    etiket: "Endirim",
+    bg: "#FFF3E5",
+    cover: "https://covers.openlibrary.org/b/isbn/1612680194-L.jpg",
+    melumat: "Maliyyə savadlılığı və sərvət qurmağın fərqli yolları haqqında praktiki kitab."
+  },
+  {
+    ad: "The Great Gatsby",
+    muellif: "F. Scott Fitzgerald",
+    qiymet: 8.49,
+    kecmisQiymet: null,
+    reytinq: 4,
+    reytinqSay: "2.9k",
+    kateqoriya: "Roman",
+    etiket: null,
+    bg: "#E8F4FD",
+    cover: "https://covers.openlibrary.org/b/isbn/0743273567-L.jpg",
+    melumat: "Amerika ədəbiyyatının klassiki, Amerikalı yuxası və sosial təbəqələr haqqında."
+  },
+  {
+    ad: "Homo Deus",
+    muellif: "Yuval Noah Harari",
+    qiymet: 18.50,
+    kecmisQiymet: null,
+    reytinq: 5,
+    reytinqSay: "1.8k",
+    kateqoriya: "Tarix",
+    etiket: "Yeni",
+    bg: "#E8FDF5",
+    cover: "https://covers.openlibrary.org/b/isbn/0062464310-L.jpg",
+    melumat: "İnsanın gələcəyi və texnologiyanın rolu haqqında fəlsəfi düşüncələr."
+  },
+  {
+    ad: "The Art of War",
+    muellif: "Sun Tzu",
+    qiymet: 6.99,
+    kecmisQiymet: null,
+    reytinq: 4,
+    reytinqSay: "7.1k",
+    kateqoriya: "Tarix",
+    etiket: null,
+    bg: "#FDF5E8",
+    cover: "https://covers.openlibrary.org/b/isbn/1590302257-L.jpg",
+    melumat: "Qədim Çin strategiyası kitabı, hərbi və biznes strategiyaları üçün bələdçi."
+  },
+  {
+    ad: "The Power of Now",
+    muellif: "Eckhart Tolle",
+    qiymet: 13.49,
+    kecmisQiymet: 15.99,
+    reytinq: 5,
+    reytinqSay: "2.2k",
+    kateqoriya: "Psixologiya",
+    etiket: "Endirim",
+    bg: "#EDFDF5",
+    cover: "https://covers.openlibrary.org/b/isbn/1577314808-L.jpg",
+    melumat: "İndiki ana fokuslanmağın və mənəvi inkişafın yolu haqqında ruhani kitab."
+  },
+  {
+    ad: "Don Quixote",
+    muellif: "Miguel de Cervantes",
+    qiymet: 11.50,
+    kecmisQiymet: null,
+    reytinq: 4,
+    reytinqSay: "1.5k",
+    kateqoriya: "Roman",
+    etiket: null,
+    bg: "#FDF3ED",
+    cover: "https://covers.openlibrary.org/b/isbn/0060934344-L.jpg",
+    melumat: "İspan ədəbiyyatının ən böyük əsəri, ritterlik xəyallarının gerçəkliklə toqquşması."
+  },
+  {
+    ad: "Brief History of Time",
+    muellif: "Stephen Hawking",
+    qiymet: 15.99,
+    kecmisQiymet: null,
+    reytinq: 5,
+    reytinqSay: "3.6k",
+    kateqoriya: "Elm",
+    etiket: null,
+    bg: "#EDF3FD",
+    cover: "https://covers.openlibrary.org/b/isbn/0553380168-L.jpg",
+    melumat: "Kainatın mənşəyi və quruluşu haqqında elm adamının sadə izahı."
+  },
+  {
+    ad: "The Lean Startup",
+    muellif: "Eric Ries",
+    qiymet: 16.99,
+    kecmisQiymet: 19.99,
+    reytinq: 4,
+    reytinqSay: "987",
+    kateqoriya: "Biznes",
+    etiket: "Endirim",
+    bg: "#F0FDF0",
+    cover: "https://covers.openlibrary.org/b/isbn/0307887898-L.jpg",
+    melumat: "Yeni bizneslərin uğurlu qurulması üçün innovativ metodologiya."
+  },
+  {
+    ad: "To Kill a Mockingbird",
+    muellif: "Harper Lee",
+    qiymet: 12.99,
+    kecmisQiymet: null,
+    reytinq: 5,
+    reytinqSay: "4.2k",
+    kateqoriya: "Roman",
+    etiket: null,
+    bg: "#F8F0FF",
+    cover: "https://covers.openlibrary.org/b/isbn/0061120081-L.jpg",
+    melumat: "Amerika cənubunda irqçilik və ədalətsizlik mövzusunda klassik roman, Scout adlı qızın gözü ilə."
+  },
+  {
+    ad: "Pride and Prejudice",
+    muellif: "Jane Austen",
+    qiymet: 9.99,
+    kecmisQiymet: 12.99,
+    reytinq: 5,
+    reytinqSay: "3.8k",
+    kateqoriya: "Roman",
+    etiket: "Endirim",
+    bg: "#FFF0F5",
+    cover: "https://covers.openlibrary.org/b/isbn/0141439513-L.jpg",
+    melumat: "İngilis ədəbiyyatının şah əsəri, Elizabeth Bennet və Mr. Darcy-nin sevgi hekayəsi."
+  },
+  {
+    ad: "The Catcher in the Rye",
+    muellif: "J.D. Salinger",
+    qiymet: 11.49,
+    kecmisQiymet: null,
+    reytinq: 4,
+    reytinqSay: "2.5k",
+    kateqoriya: "Roman",
+    etiket: null,
+    bg: "#F0F8FF",
+    cover: "https://covers.openlibrary.org/b/isbn/0316769487-L.jpg",
+    melumat: "Gənc Holden Caulfield-in Nyu-Yorkda yaşadığı macəralar, yeniyetməlik böhranı mövzusunda."
+  },
+  {
+    ad: "Lord of the Flies",
+    muellif: "William Golding",
+    qiymet: 10.99,
+    kecmisQiymet: null,
+    reytinq: 4,
+    reytinqSay: "1.9k",
+    kateqoriya: "Roman",
+    etiket: null,
+    bg: "#F5F5DC",
+    cover: "https://covers.openlibrary.org/b/isbn/0399501487-L.jpg",
+    melumat: "Təyyarə qəzası nəticəsində adada qalan uşaqların cəmiyyət qurma cəhdləri."
+  },
+  {
+    ad: "The Hobbit",
+    muellif: "J.R.R. Tolkien",
+    qiymet: 14.99,
+    kecmisQiymet: 17.99,
+    reytinq: 5,
+    reytinqSay: "5.1k",
+    kateqoriya: "Uşaq",
+    etiket: "Endirim",
+    bg: "#FFFACD",
+    cover: "https://covers.openlibrary.org/b/isbn/054792822X-L.jpg",
+    melumat: "Hobbit Bilbo Baggins-in macəra dolu səyahəti, Orta Dünya-nın başlanğıcı."
+  }
+];
+
+var sebetSay = 0;
+var aktıvKateqoriya = "Hamısı";
+var istifadeciElanlar = [];
+var sebet = [];
+
+function sebetGoster() {
+  sebetYenile();
+  document.getElementById("sebetModal").classList.add("goster");
+}
+
+function sebetBagla() {
+  document.getElementById("sebetModal").classList.remove("goster");
+}
+
+function sebetYenile() {
+  var konteyner = document.getElementById("sebetMəhsullar");
+  var cemEl = document.getElementById("sebetCem");
+  
+  if (sebet.length === 0) {
+    konteyner.innerHTML = '<div class="sebet-bos"><div class="bos-ikon">🛒</div><p>Səbətiniz boşdur</p></div>';
+    cemEl.textContent = "0.00 ₼";
+    return;
+  }
+  
+  var html = "";
+  var cem = 0;
+  
+  sebet.forEach(function(item, index) {
+    var umumi = item.qiymet * item.say;
+    cem += umumi;
+    
+    html += '<div class="sebet-mehsul">' +
+      '<div class="sebet-mehsul-sekil">' +
+        (item.cover ? '<img src="' + item.cover + '" alt="' + item.ad + '" style="width: 40px; height: 60px; object-fit: cover; border-radius: 4px;">' : '📖') +
+      '</div>' +
+      '<div class="sebet-mehsul-melumat">' +
+        '<div class="sebet-mehsul-ad" title="' + item.ad + '">' + item.ad + '</div>' +
+        '<div class="sebet-mehsul-muellif">' + item.muellif + '</div>' +
+        '<div class="sebet-mehsul-qiymet">' + item.qiymet.toFixed(2) + ' ₼</div>' +
+      '</div>' +
+      '<div class="sebet-miqdar">' +
+        '<button class="sebet-miqdar-dugme" onclick="miqdarDeyis(' + index + ', -1)">−</button>' +
+        '<span class="sebet-miqdar-say">' + item.say + '</span>' +
+        '<button class="sebet-miqdar-dugme" onclick="miqdarDeyis(' + index + ', 1)">+</button>' +
+      '</div>' +
+      '<button class="sebet-sil" onclick="mehsulSil(' + index + ')">🗑️</button>' +
+    '</div>';
+  });
+  
+  konteyner.innerHTML = html;
+  cemEl.textContent = cem.toFixed(2) + " ₼";
+}
+
+function miqdarDeyis(index, deyis) {
+  sebet[index].say += deyis;
+  if (sebet[index].say <= 0) {
+    sebet.splice(index, 1);
+  }
+  sebetSay = sebet.reduce(function(total, item) { return total + item.say; }, 0);
+  document.getElementById("sebetDugme").textContent = "🛒 Səbət (" + sebetSay + ")";
+  sebetYenile();
+}
+
+function mehsulSil(index) {
+  sebet.splice(index, 1);
+  sebetSay = sebet.reduce(function(total, item) { return total + item.say; }, 0);
+  document.getElementById("sebetDugme").textContent = "🛒 Səbət (" + sebetSay + ")";
+  sebetYenile();
+  bildirişGoster("Məhsul səbətdən silindi");
+}
+
+function sebetSifar() {
+  sebet = [];
+  sebetSay = 0;
+  document.getElementById("sebetDugme").textContent = "🛒 Səbət (0)";
+  sebetYenile();
+  bildirişGoster("Səbət boşaldıldı");
+}
+
+function sebetAl() {
+  if (sebet.length === 0) {
+    bildirişGoster("Səbətiniz boşdur!");
+    return;
+  }
+  bildirişGoster("Sifariş uğurla qəbul edildi! Tezliklə əlaqə saxlanılacaq.");
+  sebetSifar();
+  sebetBagla();
+}
+function ulduzlar(say) {
+  var s = "";
+  for (var i = 1; i <= 5; i++) {
+    s += i <= say ? "★" : "☆";
+  }
+  return s;
+}
+
+function kitabKartHtml(k, isElan) {
+  var etiketHtml = "";
+  if (isElan) {
+    etiketHtml = '<span class="elan-etiket">Elan</span>';
+  } else if (k.etiket === "Yeni") {
+    etiketHtml = '<span class="yeni-etiket">Yeni</span>';
+  } else if (k.etiket === "Endirim") {
+    var faiz = Math.round((1 - k.qiymet / k.kecmisQiymet) * 100);
+    etiketHtml = '<span class="endirim-etiket">-' + faiz + '%</span>';
+  }
+
+  var qiymetStr = k.qiymet.toFixed(2) + " ₼";
+  var kecmisHtml = k.kecmisQiymet
+    ? '<span class="kecmis-qiymet">' + k.kecmisQiymet.toFixed(2) + ' ₼</span>'
+    : "";
+
+  var imgHtml = k.cover
+    ? '<img src="' + k.cover + '" alt="' + k.ad + '" loading="lazy" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'">' +
+      '<span class="fallback-icon" style="display:none">📗</span>'
+    : '<span class="fallback-icon">📗</span>';
+
+  return '<div class="kitab-kart" onclick="kitabMelumatGoster(this)">' +
+    '<div class="kitab-sekil" style="background:' + k.bg + '">' +
+      imgHtml +
+      etiketHtml +
+    '</div>' +
+    '<div class="kitab-melumat">' +
+      '<div class="kitab-ad" title="' + k.ad + '">' + k.ad + '</div>' +
+      '<div class="kitab-muellif">' + k.muellif + '</div>' +
+      '<div class="reytinq">' +
+        '<span class="ulduzlar">' + ulduzlar(k.reytinq) + '</span>' +
+        '<span class="reytinq-say">(' + k.reytinqSay + ')</span>' +
+      '</div>' +
+      '<div class="qiymet-sira">' +
+        '<div>' +
+          '<span class="qiymet">' + qiymetStr + '</span>' +
+          kecmisHtml +
+        '</div>' +
+        '<button class="sepete-at" onclick="event.stopPropagation(); sebeteElave(this)">+ Səbət</button>' +
+      '</div>' +
+    '</div>' +
+  '</div>';
+}
+
+function kitablarGoster(siyahi, isElan) {
+  var qrid = document.getElementById("kitabQrid");
+  if (siyahi.length === 0) {
+    qrid.innerHTML = '<div class="bos-neticə"><div class="bos-ikon">🔍</div><p>Heç bir kitab tapılmadı.</p></div>';
+    return;
+  }
+  var html = "";
+  siyahi.forEach(function(k) {
+    html += kitabKartHtml(k, isElan || k._elan);
+  });
+  qrid.innerHTML = html;
+}
+
+function ilkinGoster() {
+  kitablarGoster(KITABLAR, false);
+}
+
+function axtarişEt(deger) {
+  var q = deger.trim().toLowerCase();
+  var neticeBolme = document.getElementById("axtarisNeticesi");
+  var hamısı = KITABLAR.concat(istifadeciElanlar);
+
+  if (!q) {
+    document.getElementById("bolumBasliq").textContent = "Populyar kitablar";
+    neticeBolme.textContent = "";
+    var gostər = aktıvKateqoriya === "Hamısı"
+      ? KITABLAR
+      : KITABLAR.filter(function(k){ return k.kateqoriya === aktıvKateqoriya; });
+    kitablarGoster(gostər, false);
+    return;
+  }
+
+  var netice = hamısı.filter(function(k) {
+    return k.ad.toLowerCase().includes(q) || k.muellif.toLowerCase().includes(q);
+  });
+
+  document.getElementById("bolumBasliq").textContent = "Axtarış nəticəsi";
+  neticeBolme.textContent = netice.length + " kitab tapıldı";
+  kitablarGoster(netice, false);
+}
+
+function kateqoriyaSeç(el, kat) {
+  aktıvKateqoriya = kat;
+  document.querySelectorAll(".kat-kart").forEach(function(k){ k.classList.remove("aktiv"); });
+  el.classList.add("aktiv");
+
+  document.getElementById("axtarisInput").value = "";
+  document.getElementById("axtarisNeticesi").textContent = "";
+
+  var gostər = kat === "Hamısı"
+    ? KITABLAR
+    : KITABLAR.filter(function(k){ return k.kateqoriya === kat; });
+
+  document.getElementById("bolumBasliq").textContent = kat === "Hamısı" ? "Populyar kitablar" : kat;
+  kitablarGoster(gostər, false);
+}
+
+function sebeteElave(dugme) {
+  var kart = dugme.closest('.kitab-kart');
+  var ad = kart.querySelector('.kitab-ad').textContent;
+  var muellif = kart.querySelector('.kitab-muellif').textContent;
+  var qiymetText = kart.querySelector('.qiymet').textContent;
+  var qiymet = parseFloat(qiymetText.replace(' ₼', ''));
+  
+  // Kitabın üz qabığını tap
+  var sekil = kart.querySelector('.kitab-sekil img');
+  var cover = sekil ? sekil.src : null;
+  
+  // Mövcud məhsulu yoxla
+  var movcud = sebet.find(function(item) { return item.ad === ad && item.muellif === muellif; });
+  
+  if (movcud) {
+    movcud.say++;
+  } else {
+    sebet.push({
+      ad: ad,
+      muellif: muellif,
+      qiymet: qiymet,
+      cover: cover,
+      say: 1
+    });
+  }
+  
+  sebetSay = sebet.reduce(function(total, item) { return total + item.say; }, 0);
+  
+  dugme.textContent = "✓ Əlavə edildi";
+  dugme.style.background = "#0F6E56";
+  setTimeout(function() {
+    dugme.textContent = "+ Səbət";
+    dugme.style.background = "";
+  }, 2000);
+  
+  document.getElementById("sebetDugme").textContent = "🛒 Səbət (" + sebetSay + ")";
+  bildirişGoster("Kitab səbətə əlavə edildi! 🎉");
+}
+
+function bildirişGoster(metn) {
+  var el = document.getElementById("bildiris");
+  el.textContent = metn;
+  el.classList.add("goster");
+  setTimeout(function() { el.classList.remove("goster"); }, 2500);
+}
+
+function elanYerleşdir() {
+  var ad = document.getElementById("elanAd").value.trim();
+  var muellif = document.getElementById("elanMuellif").value.trim();
+  var qiymetVal = parseFloat(document.getElementById("elanQiymet").value);
+  var kat = document.getElementById("elanKateqoriya").value;
+  var vez = document.getElementById("elanVeziyyet").value;
+  var elaqe = document.getElementById("elanElaqe").value.trim();
+  var acıqlama = document.getElementById("elanAcıqlama").value.trim();
+
+  if (!ad || !muellif || isNaN(qiymetVal) || qiymetVal <= 0) {
+    bildirişGoster("⚠️ Kitab adı, müəllif və qiymət mütləqdir!");
+    return;
+  }
+
+  var yeniElan = {
+    ad: ad,
+    muellif: muellif,
+    qiymet: qiymetVal,
+    kecmisQiymet: null,
+    reytinq: 4,
+    reytinqSay: "Yeni",
+    kateqoriya: kat,
+    etiket: vez === "Yeni" ? "Yeni" : null,
+    bg: "#F0EDF8",
+    cover: null,
+    _elan: true,
+    elaqe: elaqe,
+    acıqlama: acıqlama
+  };
+
+  istifadeciElanlar.unshift(yeniElan);
+
+  // Formu təmizlə
+  ["elanAd","elanMuellif","elanQiymet","elanElaqe","elanAcıqlama"].forEach(function(id){
+    document.getElementById(id).value = "";
+  });
+
+  // Elanlar listini göstər
+  var listDiv = document.getElementById("elanlarList");
+  listDiv.style.display = "grid";
+  var html = "";
+  istifadeciElanlar.forEach(function(e){ html += kitabKartHtml(e, true); });
+  listDiv.innerHTML = html;
+
+  bildirişGoster("Elanınız uğurla yerləşdirildi! 📌");
+
+  // Əgər kateqoriya uyğun gəlirsə — ana siyahıya da əlavə et
+  if (aktıvKateqoriya === "Hamısı" || aktıvKateqoriya === kat) {
+    var gostər = (aktıvKateqoriya === "Hamısı" ? KITABLAR : KITABLAR.filter(function(k){ return k.kateqoriya === aktıvKateqoriya; }));
+    kitablarGoster([yeniElan].concat(gostər), false);
+  }
+}
+
+ilkinGoster();
+
+// Modal xaric kliklə bağla
+document.getElementById("sebetModal").addEventListener("click", function(e) {
+  if (e.target === this) {
+    sebetBagla();
+  }
+});
+
+function kitabMelumatGoster(kart) {
+  var ad = kart.querySelector('.kitab-ad').textContent;
+  var muellif = kart.querySelector('.kitab-muellif').textContent;
+  var kitab = KITABLAR.find(function(k) { return k.ad === ad && k.muellif === muellif; });
+  
+  if (!kitab) {
+    // İstifadəçi elanları üçün yoxla
+    kitab = istifadeciElanlar.find(function(k) { return k.ad === ad && k.muellif === muellif; });
+  }
+  
+  if (kitab) {
+    var melumat = kitab.melumat || kitab.acıqlama || "Bu kitab haqqında əlavə məlumat yoxdur.";
+    document.getElementById('melumatBasliq').textContent = kitab.ad;
+    document.getElementById('melumatMuellif').textContent = 'Müəllif: ' + kitab.muellif;
+    document.getElementById('melumatMetn').textContent = melumat;
+    document.getElementById('kitabMelumatModal').classList.add('goster');
+  }
+}
+
+function kitabMelumatBagla() {
+  document.getElementById('kitabMelumatModal').classList.remove('goster');
+}
+
+document.getElementById('kitabMelumatModal').addEventListener('click', function(e) {
+  if (e.target === this) {
+    kitabMelumatBagla();
+  }
+});
+</script>
+
+<div id="kitabMelumatModal" class="modal">
+  <div class="modal-ici">
+    <div class="modal-basliq">
+      <h2 id="melumatBasliq"></h2>
+      <button class="modal-bagla" onclick="kitabMelumatBagla()">×</button>
+    </div>
+    <div class="modal-melumat">
+      <p id="melumatMuellif"></p>
+      <p id="melumatMetn"></p>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
